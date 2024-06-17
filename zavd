@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+// Функція для заповнення масиву степенями двійки
+void fillArray(int arr[], int size) {
+    for (int i = 0; i < size; ++i) {
+        arr[i] = pow(2, i);
+    }
+}
+
+// Функція інтерполяційного пошуку
+int interpolationSearch(int arr[], int size, int x) {
+    int low = 0;
+    int high = size - 1;
+
+    while (low <= high && x >= arr[low] && x <= arr[high]) {
+        if (low == high) {
+            if (arr[low] == x) {
+                return low;
+            }
+            return -1;
+        }
+
+        int pos = low + ((double)(high - low) / (arr[high] - arr[low])) * (x - arr[low]);
+
+        if (arr[pos] == x) {
+            return pos;
+        }
+
+        if (arr[pos] < x) {
+            low = pos + 1;
+        } else {
+            high = pos - 1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    const int SIZE = 25;
+    int arr[SIZE];
+
+    // Заповнення масиву степенями двійки
+    fillArray(arr, SIZE);
+
+    // Виведення масиву на екран
+    cout << "Масив степенів двійки: ";
+    for (int i = 0; i < SIZE; ++i) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    // Введення числа для пошуку
+    int x;
+    cout << "Введіть число для пошуку: ";
+    cin >> x;
+
+    // Виклик функції інтерполяційного пошуку
+    int index = interpolationSearch(arr, SIZE, x);
+
+    // Виведення результату пошуку
+    if (index != -1) {
+        cout << "Число " << x << " знайдено на індексі " << index << "." << endl;
+    } else {
+        cout << "Число " << x << " не знайдено в масиві." << endl;
+    }
+
+    return 0;
+}
