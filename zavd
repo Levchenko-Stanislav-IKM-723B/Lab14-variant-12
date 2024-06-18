@@ -1,52 +1,79 @@
-
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 // Функція для виведення масиву
-void printArray(const vector<double>& arr) {
-    for (double num : arr) {
-        cout << num << " ";
+void printArray(const double arr[], int size) {
+    for (int i = 0; i < size; ++i) {
+        cout << arr[i] << " ";
     }
     cout << endl;
+}
+
+// Функція для об'єднання двох частин масиву
+void mergeArrays(double result[], const double arr1[], int size1, const double arr2[], int size2) {
+    for (int i = 0; i < size1; ++i) {
+        result[i] = arr1[i];
+    }
+    for (int i = 0; i < size2; ++i) {
+        result[size1 + i] = arr2[i];
+    }
+}
+
+// Функція для сортування масиву (пузиркове сортування)
+void bubbleSort(double arr[], int size) {
+    for (int i = 0; i < size - 1; ++i) {
+        for (int j = 0; j < size - i - 1; ++j) {
+            if (arr[j] > arr[j + 1]) {
+                double temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
 }
 
 // Основна функція
 int main() {
     const int SIZE = 20;
-    vector<double> a(SIZE);
+    double a[SIZE];
 
     // Заповнення масиву випадковими дійсними числами
     cout << "Початковий масив: ";
     for (int i = 0; i < SIZE; ++i) {
         a[i] = (rand() % 1000) / 100.0;  // Генеруємо випадкові дійсні числа в діапазоні від 0 до 9.99
+        cout << a[i] << " ";
     }
-    printArray(a);
+    cout << endl;
+
+    // Масиви для розділення частин
+    double part1[SIZE];
+    double part2[SIZE];
+    int part1Size = 0;
+    int part2Size = 0;
 
     // Розділення масиву на дві частини
-    vector<double> part1, part2;
-    for (double num : a) {
-        if (static_cast<int>(num) <= 1) {
-            part1.push_back(num);
+    for (int i = 0; i < SIZE; ++i) {
+        if (static_cast<int>(a[i]) <= 1) {
+            part1[part1Size++] = a[i];
         } else {
-            part2.push_back(num);
+            part2[part2Size++] = a[i];
         }
     }
 
-    // Об'єднання частин масиву
-    part1.insert(part1.end(), part2.begin(), part2.end());
+    // Масив для об'єднання частин
+    double result[SIZE];
+    mergeArrays(result, part1, part1Size, part2, part2Size);
 
     // Виведення перетвореного масиву
     cout << "Перетворений масив: ";
-    printArray(part1);
+    printArray(result, SIZE);
 
     // Сортування масиву за зростанням
-    sort(part1.begin(), part1.end());
+    bubbleSort(result, SIZE);
 
     // Виведення відсортованого масиву
     cout << "Відсортований масив: ";
-    printArray(part1);
+    printArray(result, SIZE);
 
     return 0;
 }
